@@ -12,7 +12,7 @@ version: "1.0"
 date-released: "2026-10-25"
 license: MIT
 license-url: "https://opensource.org/license/mit"
-repository-code: "⟨仓库地址⟩"
+repository-code: "⟨TODO: 仓库地址⟩"
 keywords:
   - enterprise-diagnosis
   - document-analysis
