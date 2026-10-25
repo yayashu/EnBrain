@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>谋全局 EnBrain · 系统原型（核心诊断引擎）</title>
+<style>
+  :root{ --bg:#f5f6fa; --card:#fff; --border:#e5e7eb; --text:#1f2937; --text2:#6b7280;
+    --primary:#4f46e5; --primary-light:#eef2ff; --green:#059669; --green-bg:#d1fae5;
+    --amber:#d97706; --amber-bg:#fef3c7; --red:#dc2626; --red-bg:#fee2e2; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);}
+  #demo-notice{background:#1f2937;color:#f9fafb;font-size:12px;line-height:32px;padding:0 16px;text-align:center;letter-spacing:.2px}
+  #demo-notice b{color:#fbbf24;font-weight:600}
+  header{background:var(--card);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+  header .brand{font-weight:700;color:var(--primary);font-size:15px;white-space:nowrap;}
+  header .tag{font-size:12px;color:var(--text2);}
+  header .spacer{flex:1;}
+  .btn{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;}
+  .btn.ghost{background:var(--card);color:var(--text);border:1px solid var(--border);}
+  .btn.ghost.active{background:var(--primary-light);color:var(--primary);border-color:var(--primary);}
+
+  .wrap{display:grid;grid-template-columns:320px 1fr;gap:16px;padding:16px;max-width:1500px;margin:0 auto;}
+
+  /* 左栏：画像 + 权重 */
+  .side{display:flex;flex-direction:column;gap:16px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
+  .card h3{font-size:13px;color:var(--text2);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+  .card h3 .ico{width:20px;height:20px;border-radius:5px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;}
+
+  .field-row{margin-bottom:10px;}
+  .field-row label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;}
+  .field-row input,.field-row select{width:100%;border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:13px;outline:none;}
+  .field-row input:focus,.field-row select:focus{border-color:var(--primary);}
+  .field-row .inline{display:flex;gap:6px;}
+  .field-row .inline input{flex:1;}
+
+  /* 权重滑块 */
+  .slider-row{margin-bottom:12px;}
+  .slider-row .lab{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:4px;}
+  .slider-row .lab b{color:var(--text);}
+  input[type=range]{width:100%;accent-color:var(--primary);}
+  .weight-note{font-size:11px;color:#9ca3af;line-height:1.5;margin-top:8px;}
+
+  /* 右栏：结果 */
+  .result{display:flex;flex-direction:column;gap:16px;}
+  .metric-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .metric{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
+  .metric .v{font-size:24px;font-weight:800;color:var(--primary);}
+  .metric .v small{font-size:12px;font-weight:600;}
+  .metric .k{font-size:12px;color:var(--text2);margin-top:4px;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);}
+  th{background:#fafbfc;text-align:left;padding:10px 12px;font-size:12px;color:var(--text2);border-bottom:1px solid var(--border);white-space:nowrap;}
+  td{padding:10px 12px;border-bottom:1px solid #f3f4f6;vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  .rank{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-size:11px;font-weight:700;align-items:center;justify-content:center;}
+  .rank.top{background:var(--primary);color:#fff;}
+  .tech{display:inline-block;font-size:11px;border-radius:5px;padding:2px 8px;font-weight:600;}
+  .tech.S0{background:#f3f4f6;color:#6b7280}.tech.S1{background:#e0f2fe;color:#0369a1}
+  .tech.S2{background:#dcfce7;color:#15803d}.tech.S3{background:#fef9c3;color:#a16207}
+  .tech.S4{background:#f3e8ff;color:#7c3aed}.tech.S5{background:#fee2e2;color:#b91c1c}
+  .tech.非技术{background:#fff7ed;color:#c2410c}
+  .ali{font-weight:700;color:var(--primary);}
+  .ali-val{font-size:11px;color:var(--text2);}
+  .roi{font-weight:600;color:var(--green);}
+  .roi.neg{color:var(--red);}
+  .mode{font-size:12px;}
+  .roi-range{font-size:11px;color:#9ca3af;}
+
+  .panel-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .panel-head h2{font-size:15px;font-weight:700;}
+  .panel-head .cnt{font-size:12px;color:var(--text2);background:#f3f4f6;border-radius:10px;padding:2px 8px;}
+  .legend{display:flex;gap:14px;font-size:11px;color:var(--text2);flex-wrap:wrap;margin-bottom:10px;}
+  .legend span{display:flex;align-items:center;gap:4px;}
+  .legend .dot{width:8px;height:8px;border-radius:2px;display:inline-block;}
+
+  .report-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
+  .report-card h2{font-size:15px;font-weight:700;margin-bottom:12px;}
+  .report-card h4{font-size:13px;margin:14px 0 8px;color:var(--primary);}
+  .report-card ul{list-style:none;}
+  .report-card li{font-size:13px;padding:6px 0;line-height:1.6;border-bottom:1px dashed var(--border);}
+  .report-card li:last-child{border-bottom:none;}
+  .report-card li b{color:var(--primary);}
+  .nonai{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;font-size:12px;color:#92400e;line-height:1.6;}
+  .nonai b{display:block;margin-bottom:4px;}
+</style>
+</head>
+<body>
+<div id="demo-notice">方案演示原型 · 演示企业数据均为<b>虚构示例</b> · 金额为演示测算，<b>不构成报价或交付承诺</b></div>
+<header>
+  <span class="brand">谋全局 EnBrain</span>
+  <span class="tag">系统原型 · 核心诊断引擎（画像 → 匹配 → 评分 → 选型 → ROI → 交付 → 报告）</span>
+  <div class="spacer"></div>
+  <button class="btn ghost" id="btn-ecom">跨境电商</button>
+  <button class="btn ghost" id="btn-mfg">离散制造</button>
+  <button class="btn ghost" id="btn-svc">专业服务</button>
+  <button class="btn" onclick="run()">运行诊断</button>
+</header>
+
+<div class="wrap">
+  <!-- ========== 左栏 ========== -->
+  <div class="side">
+    <div class="card">
+      <h3><span class="ico">企</span>企业画像（可编辑，改后点「运行诊断」）</h3>
+      <div class="field-row"><label>企业名称</label><input id="f-name"></div>
+      <div class="field-row"><label>行业</label><select id="f-industry"><option>零售电商</option><option>离散制造</option><option>专业服务</option></select></div>
+      <div class="field-row"><label>员工规模（人）</label><input id="f-count" type="number"></div>
+      <div class="field-row"><label>在用系统（逗号分隔）</label><input id="f-systems"></div>
+      <div class="field-row"><label>部门人数（客服/运营/财务/质检/生产/IT…）</label>
+        <div class="inline"><input id="f-dept-key" placeholder="部门"><input id="f-dept-val" type="number" placeholder="人数"></div>
+      </div>
+      <div class="field-row"><label>合规等级</label><select id="f-compliance"><option>低</option><option>中</option><option>高</option></select></div>
+      <div class="field-row"><label>流程标准化</label><select id="f-std"><option>低</option><option>中</option><option>高</option></select></div>
+      <div class="field-row"><label>IT 人数</label><input id="f-it" type="number"></div>
+      <div class="field-row"><label>痛点（逗号分隔）</label><input id="f-pains"></div>
+      <div class="field-row"><label>数据不出域</label><select id="f-outbound"><option value="false">否</option><option value="true">是</option></select></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ico">权</span>ALI 评分权重（拖动实时看排序变化）</h3>
+      <div class="slider-row"><div class="lab"><span>价值度 V</span><b id="w-V">0.45</b></div><input type="range" id="s-V" min="0" max="1" step="0.05" value="0.45"></div>
+      <div class="slider-row"><div class="lab"><span>可行性 F</span><b id="w-F">0.35</b></div><input type="range" id="s-F" min="0" max="1" step="0.05" value="0.35"></div>
+      <div class="slider-row"><div class="lab"><span>风险度 R（扣分项）</span><b id="w-R">0.20</b></div><input type="range" id="s-R" min="0" max="1" step="0.05" value="0.20"></div>
+      <div class="weight-note">ALI = V×V权 + F×F权 − R×R权。拖动权重观察机会排序变化——这就是验证「评分设计是否合理」的方式。</div>
+    </div>
+  </div>
+
+  <!-- ========== 右栏：结果 ========== -->
+  <div class="result" id="result">
+    <div class="card" style="text-align:center;color:var(--text2);padding:60px 20px;font-size:14px;">
+      选择左侧企业（或改画像字段）→ 点「运行诊断」查看核心引擎输出。<br>
+      <span style="font-size:12px;color:#9ca3af">本原型真实实现：机会匹配（规则求值器）→ ALI 评分 → 手段选型 → ROI 测算 → 交付决策</span>
+    </div>
+  </div>
+</div>
+
+<script src="engine.js"></script>
+<script>
+/* ---------- 3 个示例企业 ---------- */
+const SAMPLES = {
+  ecom: { name:'宁波某家居用品有限公司', industry:'零售电商', employeeCount:180,
+    systems:['店小秘ERP','金蝶财务'], departments:{'客服':32,'运营':20,'财务':5,'门店':40},
+    itHeadcount:1, complianceLevel:'低', stdLevel:'中', skillMatch:40, platformReady:30, aiExp:20, dataQuality:50, dataOutbound:false,
+    pains:['客服','工单','对账','素材','库存','SKU'], bizFlows:['订单','客服','库存','财务','营销'] },
+  mfg: { name:'某汽车零部件有限公司', industry:'离散制造', employeeCount:500,
+    systems:['MES','用友ERP'], departments:{'质检':15,'生产':120,'采购':8,'销售':20},
+    itHeadcount:3, complianceLevel:'中', stdLevel:'中', skillMatch:60, platformReady:50, aiExp:30, dataQuality:60, dataOutbound:false,
+    pains:['重复录入','质检','交期','采购','不良','孤岛'], bizFlows:['生产','质检','采购','销售','财务'] },
+  svc: { name:'某审计咨询事务所', industry:'专业服务', employeeCount:120,
+    systems:['OA','钉钉'], departments:{'财务':30,'法务':8,'HR':5,'运营':15},
+    itHeadcount:2, complianceLevel:'低', stdLevel:'高', skillMatch:55, platformReady:40, aiExp:40, dataQuality:55, dataOutbound:false,
+    pains:['合同','票据','录入','制度','咨询','风险'], bizFlows:['审计','合同','票据','人力'] },
+};
+let current = JSON.parse(JSON.stringify(SAMPLES.ecom));
+let weights = JSON.parse(JSON.stringify(DEFAULT_WEIGHTS));
+
+/* ---------- 画像 → 表单 ---------- */
+function loadSample(key) {
+  current = JSON.parse(JSON.stringify(SAMPLES[key]));
+  syncForm();
+  document.querySelectorAll('header .ghost').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+key).classList.add('active');
+  run();
+}
+function syncForm() {
+  document.getElementById('f-name').value = current.name;
+  document.getElementById('f-industry').value = current.industry;
+  document.getElementById('f-count').value = current.employeeCount;
+  document.getElementById('f-systems').value = current.systems.join(',');
+  document.getElementById('f-compliance').value = current.complianceLevel;
+  document.getElementById('f-std').value = current.stdLevel;
+  document.getElementById('f-it').value = current.itHeadcount;
+  document.getElementById('f-pains').value = current.pains.join(',');
+  document.getElementById('f-outbound').value = String(current.dataOutbound);
+  document.getElementById('f-dept-key').value = '客服';
+  document.getElementById('f-dept-val').value = current.departments['客服'] || '';
+}
+function readForm() {
+  current.name = document.getElementById('f-name').value;
+  current.industry = document.getElementById('f-industry').value;
+  current.employeeCount = parseInt(document.getElementById('f-count').value) || 0;
+  current.systems = document.getElementById('f-systems').value.split(/[,，]/).map(s=>s.trim()).filter(Boolean);
+  current.complianceLevel = document.getElementById('f-compliance').value;
+  current.stdLevel = document.getElementById('f-std').value;
+  current.itHeadcount = parseInt(document.getElementById('f-it').value) || 0;
+  current.pains = document.getElementById('f-pains').value.split(/[,，]/).map(s=>s.trim()).filter(Boolean);
+  current.dataOutbound = document.getElementById('f-outbound').value === 'true';
+  const dk = document.getElementById('f-dept-key').value.trim();
+  const dv = parseInt(document.getElementById('f-dept-val').value) || 0;
+  if (dk) current.departments[dk] = dv;
+}
+
+/* ---------- 权重滑块 ---------- */
+['V','F','R'].forEach(k=>{
+  document.getElementById('s-'+k).addEventListener('input', e=>{
+    const v = parseFloat(e.target.value);
+    document.getElementById('w-'+k).textContent = v.toFixed(2);
+    weights.top[k] = v;
+    if (document.getElementById('result').dataset.rendered) run(true);
+  });
+});
+
+/* ---------- 运行诊断 ---------- */
+function run(silent) {
+  readForm();
+  const diag = runDiagnosis(current, weights);
+  render(diag, silent);
+}
+
+function techLabel(t) { return t === 'S4' ? 'S4 智能增强' : t === 'S5' ? 'S5 智能自治' : t === 'S3' ? 'S3 自动化' : t === 'S2' ? 'S2 集成' : t === 'S1' ? 'S1 配置' : t === 'S0' ? 'S0 消除' : '非技术'; }
+
+function render(diag, silent) {
+  const el = document.getElementById('result');
+  el.dataset.rendered = '1';
+  const { results, aiList, nonAiList, matchedCount, profile } = diag;
+  const totalBenefit = results.reduce((s,r)=>s+r.roi.totalBenefit,0);
+  const avgROI = results.length ? results.reduce((s,r)=>s+r.roi.roi,0)/results.length : 0;
+
+  const top3 = results.slice(0,3);
+  const rows = results.map((r,i)=>`
+    <tr>
+      <td><span class="rank ${i<3?'top':''}">${i+1}</span></td>
+      <td>${r.opp.name}<div class="ali-val">${r.opp.bizDomain} · ${r.opp.meansDomain}</div></td>
+      <td><span class="tech ${r.opp.meansTech}">${techLabel(r.opp.meansTech)}</span></td>
+      <td class="ali">${r.score.ALI}</td>
+      <td class="ali-val">V${r.score.V} / F${r.score.F} / R${r.score.R}</td>
+      <td class="roi ${r.roi.roi<0?'neg':''}">${r.roi.roi}×</td>
+      <td class="roi-range">${r.roi.conservative}~${r.roi.optimistic}</td>
+      <td>${r.roi.payback ? r.roi.payback+' 月' : '—'}</td>
+      <td class="mode"><b>${r.delivery.mode}</b><div class="ali-val">${r.delivery.reason}</div></td>
+    </tr>`).join('');
+
+  const nonAiNames = nonAiList.map(r=>`「${r.opp.name}」(${techLabel(r.opp.meansTech)})`).join('、');
+
+  el.innerHTML = `
+    <div class="metric-strip">
+      <div class="metric"><div class="v">${matchedCount}<small> 个</small></div><div class="k">命中机会</div></div>
+      <div class="metric"><div class="v">${aiList.length}<small> 个</small></div><div class="k">智能化机会（S4/S5）</div></div>
+      <div class="metric"><div class="v">${nonAiList.length}<small> 个</small></div><div class="k">非智能化机会（S0-S3/非技术）</div></div>
+      <div class="metric"><div class="v">¥${Math.round(totalBenefit)}<small>万</small></div><div class="k">预估年化收益合计</div></div>
+    </div>
+
+    <div class="card">
+      <div class="panel-head"><h2>机会清单（按 ALI 排序）</h2><span class="cnt">共 ${results.length} 个</span></div>
+      <div class="legend">
+        <span><span class="dot" style="background:#7c3aed"></span>S4 智能增强</span>
+        <span><span class="dot" style="background:#b91c1c"></span>S5 智能自治</span>
+        <span><span class="dot" style="background:#15803d"></span>S2 集成</span>
+        <span><span class="dot" style="background:#a16207"></span>S3 自动化</span>
+        <span><span class="dot" style="background:#6b7280"></span>S0 消除 / 非技术</span>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>机会</th><th>推荐手段</th><th>ALI</th><th>V/F/R</th><th>首年ROI</th><th>ROI区间</th><th>回收期</th><th>交付方式</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+
+    <div class="report-card">
+      <h2>精简诊断报告</h2>
+      <h4>一、TOP 3 优先机会</h4>
+      <ul>${top3.map((r,i)=>`<li><b>${i+1}. ${r.opp.name}</b>（${techLabel(r.opp.meansTech)}）— ALI ${r.score.ALI}，首年 ROI ${r.roi.roi}×，交付方式「${r.delivery.mode}」。<br><span style="color:var(--text2);font-size:12px">现状：${r.opp.asIs} → 目标：${r.opp.toBe}</span></li>`).join('')}</ul>
+      <h4>二、手段谱系（技术中立）</h4>
+      <ul>
+        <li>智能化手段（S4/S5）：<b>${aiList.length}</b> 个</li>
+        <li>非智能化手段（S0-S3 + 非技术）：<b>${nonAiList.length}</b> 个（占比 ${Math.round(nonAiList.length/Math.max(results.length,1)*100)}%，兑现「不为 AI 而 AI」）</li>
+      </ul>
+      <h4>三、不建议用 AI 清单（这些环节别花 AI 的钱）</h4>
+      <div class="nonai"><b>⚠️ 以下机会明确不推荐 AI：</b>${nonAiNames || '无（当前画像下所有匹配机会均为智能化手段）'}</div>
+    </div>`;
+}
+
+/* 初始化 */
+document.getElementById('btn-ecom').onclick = ()=>loadSample('ecom');
+document.getElementById('btn-mfg').onclick = ()=>loadSample('mfg');
+document.getElementById('btn-svc').onclick = ()=>loadSample('svc');
+loadSample('ecom');
+</script>
+</body>
+</html>

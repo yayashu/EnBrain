@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+.~*
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# 内部材料：不随开源发布（商业 / 过程台账 / 历史留档 / 第三方语料）
+internal/
