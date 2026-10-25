@@ -21,12 +21,17 @@
   ::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:4px; }
 
   /* ============ 落地页 ============ */
-  /* ===== 方案阶段声明条（静态，随页面滚动，不拦截交互） ===== */
-  #demo-notice { background:#1f2937; color:#f9fafb; font-size:12px; line-height:32px; padding:0 16px; text-align:center; letter-spacing:.2px; }
+  /* ===== 方案阶段声明：落地页整条；应用内为右下角角标（不占布局） ===== */
+  #demo-notice { position:absolute; top:0; left:0; right:0; background:#1f2937; color:#f9fafb; font-size:12px; line-height:32px; padding:0 16px; text-align:center; letter-spacing:.2px; }
   #demo-notice b { color:#fbbf24; font-weight:600; }
   #demo-notice span { color:#9ca3af; }
+  .demo-badge { position:fixed; right:14px; bottom:14px; z-index:9998; background:rgba(31,41,55,.92); color:#f9fafb; font-size:11px; line-height:1; padding:8px 12px; border-radius:999px; letter-spacing:.2px; box-shadow:0 2px 10px rgba(0,0,0,.18); }
+  .demo-badge b { color:#fbbf24; font-weight:600; }
 
-  #landing { height:calc(100vh - 32px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; }
+  /* 内部页面编号（P0 / P26…）不对外展示 */
+  .pg-id { display:none !important; }
+
+  #landing { position:relative; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; }
   #landing .logo { font-size:14px; color:var(--primary); font-weight:600; letter-spacing:2px; margin-bottom:20px; }
   #landing h1 { font-size:34px; font-weight:700; line-height:1.3; margin-bottom:12px; }
   #landing h1 span { color:var(--primary); }
@@ -282,11 +287,9 @@
 </head>
 <body>
 
-<!-- ============ 方案阶段声明（开源版固定条） ============ -->
-<div id="demo-notice">方案演示原型 · 界面数据与企业名称均为<b>虚构示例</b> · 金额为演示测算，<b>不构成报价或交付承诺</b> <span>· 详见仓库 README</span></div>
-
 <!-- ============ 落地页 ============ -->
 <div id="landing">
+  <div id="demo-notice">方案演示原型 · 界面数据与企业名称均为<b>虚构示例</b> · 金额为演示测算，<b>不构成报价或交付承诺</b> <span>· 详见仓库 README</span></div>
   <div class="logo">谋全局 EnBrain</div>
   <h1>让每个企业都拥有自己的<br><span>CIO 级运营优化大脑</span> <span class="pg-id">P0</span></h1>
   <div class="sub">上传企业全套系统文档 → AI 全量学习 → 沉淀<b>你自己的事实底座</b>，交付「闲置系统 / 未启用功能 / 手工搬运」<b>可核验的省钱结论</b>。<b>结论会过时，事实不会</b>——分析基于确定的、可溯源的数据，不靠访谈猜，靠文档算。</div>
@@ -310,6 +313,7 @@
 
 <!-- ============ 应用外壳 ============ -->
 <div id="app">
+  <div class="demo-badge">演示原型 · <b>数据为虚构示例</b></div>
   <aside id="sidebar">
     <div class="side-brand">谋全局 EnBrain</div>
     <nav id="side-nav">
@@ -1096,8 +1100,8 @@ const VIEW_TITLES = {
 
 /* ===== 资产体检 · 演示数据（制造业客户：某汽车零部件） ===== */
 const AUDIT = {
-  customer: '宁波鑫盛汽车零部件有限公司',
-  industry: '汽车零部件 · 一级供应商',
+  customer: '宁波某家居用品有限公司',
+  industry: '零售电商 · 跨境电商',
   systems: [
     {id:1, name:'ERP 用友 U9',       vendor:'用友',   ver:'V5.0', cost:180000, due:'2027-03-31', modules:['财务','供应链','生产','预算(未启用)'], status:'在用', usage:0.75, owner:'信息部 · 张工'},
     {id:2, name:'CRM 销售易',          vendor:'销售易', ver:'2023', cost:96000,  due:'2026-11-30', modules:['客户','商机','订单'], status:'在用', usage:0.70, owner:'销售部 · 王总监'},
@@ -4797,7 +4801,7 @@ function viewAudit(){
   const st=findingStats();
   const f=wsFocus();
   const tabBtn=(k,label)=>`<button class="btn ${wsTab===k?'btn-primary':'btn-line'} btn-sm" onclick="setWsTab('${k}')">${label}</button>`;
-  return `<div class="page-head"><h2>诊断工作台</h2><p>${s.customer} · ${s.industry} —— <b>三类视图</b>：事实底座（够不够、准不准）+ 可核验的硬节省 + 可落地的机会。确认、决策、跳转都在这里</p></div>
+  return `<div class="page-head"><h2>诊断工作台</h2><p>${PROFILE().name} · ${PROFILE().industry}${PROFILE().sub?' · '+PROFILE().sub:''} —— <b>三类视图</b>：事实底座（够不够、准不准）+ 可核验的硬节省 + 可落地的机会。确认、决策、跳转都在这里</p></div>
 
   <div class="card" style="padding:16px;margin-top:16px;border-left:3px solid var(--primary)">
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
