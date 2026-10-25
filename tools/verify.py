@@ -59,12 +59,12 @@ def main(argv):
         print('[1] 未指定 --topic，跳过备份检查')
 
     # ② JS 语法 + 括号配平
-    p = os.path.join(ROOT, 'prototype.html')
+    p = os.path.join(ROOT, 'product-demo.html')
     if os.path.exists(p):
         src = open(p, encoding='utf-8').read()
         blocks = re.findall(r'<script>(.*?)</script>', src, re.S)
         js = max(blocks, key=len) if blocks else ''
-        print('[2] prototype.html：script 块 %d 个，主块 %d 字符' % (len(blocks), len(js)))
+        print('[2] product-demo.html：script 块 %d 个，主块 %d 字符' % (len(blocks), len(js)))
         print('    括号配平：braces %d · parens %d · brackets %d' % (
             js.count('{') - js.count('}'), js.count('(') - js.count(')'), js.count('[') - js.count(']')))
         try:

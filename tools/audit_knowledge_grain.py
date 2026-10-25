@@ -16,7 +16,7 @@ import sys
 import esprima
 
 sys.stdout.reconfigure(encoding='utf-8')
-PROTO = 'prototype.html'
+PROTO = 'product-demo.html'
 
 
 def str_of(node):

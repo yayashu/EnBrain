@@ -15,7 +15,7 @@ import sys
 import esprima
 
 sys.stdout.reconfigure(encoding='utf-8')
-PROTO = 'prototype.html'
+PROTO = 'product-demo.html'
 
 GLOBALS = set("""undefined null true false NaN Infinity this arguments window document globalThis
 console Math JSON Date RegExp Error TypeError RangeError Promise Map Set WeakMap WeakSet Symbol BigInt
