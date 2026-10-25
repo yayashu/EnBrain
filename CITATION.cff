@@ -8,11 +8,11 @@ abstract: >-
 type: software
 authors:
   - name: "谋全局 EnBrain contributors"
-version: "1.0"
+version: "1.5"
 date-released: "2026-10-25"
 license: MIT
 license-url: "https://opensource.org/license/mit"
-repository-code: "⟨TODO: 仓库地址⟩"
+repository-code: "https://github.com/yayashu/EnBrain"
 keywords:
   - enterprise-diagnosis
   - document-analysis

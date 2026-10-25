@@ -159,7 +159,7 @@
 
 **引用格式**：
 
-> 谋全局 EnBrain.《谋全局 EnBrain · 需求说明书（对外版）》. 2026. ⟨TODO: 仓库地址⟩
+> 谋全局 EnBrain.《谋全局 EnBrain · 需求说明书（对外版）》. 2026. https://github.com/yayashu/EnBrain
 
 转载或改编时请保留署名与本仓链接，并注明是否修改。
 
