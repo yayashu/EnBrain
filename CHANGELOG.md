@@ -4,6 +4,11 @@
 
 > **两套版本号**：文首的 `vX.Y` = GitHub 发布版本（tag）；文档头部写的版本行 = 该文档自身的修订号（对外稿当前 `v1.1`，内容未变则不动）。
 
+## v1.6 · 2026-10-25
+
+- 新增根目录 **`index.html`** 作为 GitHub Pages 入口：零依赖跳转到唯一真源 `prototype.html`，含「演示数据虚构」声明与手动回退按钮
+- README 增加**在线体验**地址（`https://yayashu.github.io/EnBrain/`）与 Pages 入口说明
+
 ## v1.5 · 2026-10-25
 
 - 填入仓库地址 `https://github.com/yayashu/EnBrain`（README 引用格式、`CITATION.cff` 的 `repository-code`）

@@ -5,6 +5,8 @@
 
 ![落地页](docs/assets/shot-01-landing.png)
 
+**在线体验**：<https://yayashu.github.io/EnBrain/> · 或直接用浏览器打开本仓 `prototype.html`（单文件，图表库需联网）
+
 ## 一、当前状态
 
 | 项 | 值 |
@@ -70,7 +72,7 @@
 | 路径 | 内容 |
 | --- | --- |
 | `docs/` | 对外需求稿、路演版、交付方法（`交付准备/`）、界面截图（`assets/`） |
-| `prototype.html` | 页面级全量原型（单文件；图表库走 CDN，需联网） |
+| `prototype.html` | 页面级全量原型（单文件；图表库走 CDN，需联网）。GitHub Pages 入口为根目录 `index.html`（跳转到此文件） |
 | `system-prototype/` | 核心诊断引擎原型（`index.html` + `engine.js`，无外部依赖） |
 | `experiments/` | 公开文档实测记录（语料不随仓发布，抓取方式见记录） |
 | `tools/` | **只依赖公开文件**的审计脚本（`verify.py`、`audit_*.py`、`corpus_stats.py`），在仓库根运行 |
