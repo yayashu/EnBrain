@@ -2568,7 +2568,7 @@ function execPanel(r){
   }).join('<br>');
   if(e.state==='ok') return `<div class="insight-box" style="margin:0 0 14px;border-color:#bbf7d0;background:#f0fdf4"><b>🟢 可执行</b>：全部必需前置条件已满足，可进入落地执行。</div>`;
   if(e.state==='unlock') return `<div class="insight-box" style="margin:0 0 14px;border-color:#fde68a;background:#fffbeb"><b>🟡 需先解锁</b>：当前画像下存在以下前置缺口——<br>${miss}<br><span style="color:var(--text2)">解锁路径：${e.unlockPath}</span></div>`;
-  return `<div class="insight-box" style="margin:0 0 14px;border-color:#fecaca;background:#fef2f2"><b>🔴 暂不建议</b>：数据 + 系统双重前置缺失，当前执行风险过高——<br>${miss}<br><span style="color:var(--text2)">建议先补齐前置条件（见 PRD 6.4.2），达标后本机会自动转为可执行。</span></div>`;
+  return `<div class="insight-box" style="margin:0 0 14px;border-color:#fecaca;background:#fef2f2"><b>🔴 暂不建议</b>：数据 + 系统双重前置缺失，当前执行风险过高——<br>${miss}<br><span style="color:var(--text2)">建议先补齐前置条件，达标后本机会自动转为可执行。</span></div>`;
 }
 /* ===== P4 · Tab0 推导依据：回答"这个机会是怎么发现的"（置首位）=====
    ① 触发路径 ② 证据链（三档口径）③ 评分明细（可复算）④ 前置条件与具体缺口 */
@@ -2762,7 +2762,7 @@ function exportWord(){
   const t=reportText();
   const gate=checkQualityGate();
   const banner = gate.level==='preview'
-    ? '<div style="background:#fffbeb;border-left:4px solid #f59e0b;padding:10px;margin-bottom:14px"><b>预览级结论</b>：'+gate.reasons.join('；')+'。<br>依据 PRD 9.5.2，未确认前不得写入正式报告、不得对外分享。</div>'
+    ? '<div style="background:#fffbeb;border-left:4px solid #f59e0b;padding:10px;margin-bottom:14px"><b>预览级结论</b>：'+gate.reasons.join('；')+'。<br>依据质量门槛，未确认前不得写入正式报告、不得对外分享。</div>'
     : '';
   const body = t.split('\n').map(l=>{
     if(/^【|^\d+\.\s|^── 第/.test(l.trim())) return '<h3>'+escHtml(l)+'</h3>';
@@ -2796,7 +2796,7 @@ function exportSlides(){
     + '.num{position:absolute;bottom:26px;right:50px;color:#94a3b8;font-size:13px}'
     + '@media print{body{background:#fff}.slide{min-height:auto;padding:40px;border:none}}'
     + '</style></head><body>'
-    + (gate.level==='preview' ? '<section class="slide" style="background:#fffbeb"><h2 style="color:#b45309">预览级结论</h2><pre>'+escHtml(gate.reasons.join('；'))+'\n\n依据 PRD 9.5.2，关键字段未确认前不得写入正式报告、不得对外分享。</pre></section>' : '')
+    + (gate.level==='preview' ? '<section class="slide" style="background:#fffbeb"><h2 style="color:#b45309">预览级结论</h2><pre>'+escHtml(gate.reasons.join('；'))+'\n\n依据质量门槛，关键字段未确认前不得写入正式报告、不得对外分享。</pre></section>' : '')
     + slides
     + '<script>let cur=0;const ss=document.querySelectorAll(".slide");'
     + 'function go(n){cur=Math.max(0,Math.min(ss.length-1,n));ss[cur].scrollIntoView({behavior:"smooth"});}'
@@ -2825,8 +2825,8 @@ function checkQualityGate(){
   const unconfirmed = KEY_FIELDS.filter(k=>!confirmedFields.has(k));
   const reasons = [];
   let level = 'ok';
-  if(pqs < 50){ level='blocked'; reasons.push('PQS '+pqs+' < 50（PRD 9.5.2：拦截，不生成报告）'); }
-  else if(!diagnosis || diagnosis.length===0){ level='blocked'; reasons.push('机会库无匹配场景（PRD 9.5.2：明说未覆盖，禁止编造）'); }
+  if(pqs < 50){ level='blocked'; reasons.push('PQS '+pqs+' < 50（质量门槛：拦截，不生成报告）'); }
+  else if(!diagnosis || diagnosis.length===0){ level='blocked'; reasons.push('机会库无匹配场景（质量门槛：明说未覆盖，禁止编造）'); }
   else if(unconfirmed.length){ level='preview'; reasons.push('关键字段未确认 '+unconfirmed.length+'/'+KEY_FIELDS.length+' 项：'+unconfirmed.map(k=>KEY_FIELD_NAMES[k]||k).join('、')); }
   return {pqs, unconfirmed, level, reasons};
 }
@@ -2841,17 +2841,27 @@ function viewReport(){
   const gateHtml = g.level==='blocked'
     ? `<div class="card" style="border-color:#fecaca;background:#fef2f2;margin-bottom:14px"><h5 style="color:var(--warn)">质量门拦截 · 暂不生成正式报告</h5>
         <div style="font-size:13px;color:var(--text2);margin:6px 0">${g.reasons.join('；')}</div>
-        <div style="font-size:12px;color:var(--text3)">依据 PRD 9.5.2「必须拒识场景」：低质量画像出报告 = 用错误结论误导决策，宁可不给。</div>
+        <div style="font-size:12px;color:var(--text3)">依据质量门槛「必须拒识场景」：低质量画像出报告 = 用错误结论误导决策，宁可不给。</div>
         <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="goto('profile-overview')">去补充画像 →</button></div>`
     : g.level==='preview'
     ? `<div class="card" style="border-color:#fde68a;background:#fffbeb;margin-bottom:14px"><h5 style="color:#b45309">预览级结论 · 不得写入正式报告、不得对外分享</h5>
         <div style="font-size:13px;color:var(--text2);margin:6px 0">${g.reasons.join('；')}</div>
-        <div style="font-size:12px;color:var(--text3)">依据 PRD 9.5.2：关键字段未确认时只出预览级结论。确认后自动转为正式版（质量门实时校验）。</div>
+        <div style="font-size:12px;color:var(--text3)">依据质量门槛：关键字段未确认时只出预览级结论。确认后自动转为正式版（质量门实时校验）。</div>
         <button class="btn btn-line btn-sm" style="margin-top:8px" onclick="goto('profile-overview')">去确认关键字段 →</button></div>`
     : `<div class="card" style="border-color:#bbf7d0;background:#f0fdf4;margin-bottom:14px"><div style="font-size:13px;color:#166534">质量门通过：PQS ${g.pqs}/100 · 关键字段 ${KEY_FIELDS.length}/${KEY_FIELDS.length} 已确认 · 可导出正式报告</div></div>`;
+  /* 结论口径卡：正面声明"允许未发现重大问题"——诚实性的一屏证据 */
+  const zeroCaseHtml = `<div class="card" style="margin-bottom:14px">
+      <h5>结论口径 · 允许出现「未发现重大问题」</h5>
+      <div style="font-size:13px;color:var(--text2);margin:6px 0">报告结论只取决于事实底座覆盖到什么程度，<b>不以「发现问题多少」为目标</b>：三类硬节省若确实为零，报告直接写明「未发现重大问题」，并同时给出覆盖度与盲区——不凑结论、不硬找问题。</div>
+      <table style="width:100%;font-size:12px;border-collapse:collapse;margin-top:6px">
+        <tr><td style="padding:4px 8px 4px 0;color:var(--text3);width:64px;vertical-align:top">覆盖度</td><td style="padding:4px 0">只对已学习文档覆盖到的系统下结论；每章结论均可回溯到「文档 → 条目 → 结论」</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:var(--text3);vertical-align:top">盲区</td><td style="padding:4px 0">未提供文档的系统单独列为「未覆盖」——这些系统上的省钱项<b>判不了</b>，不写成「没问题」</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:var(--text3);vertical-align:top">抽检</td><td style="padding:4px 0">客户确认过的结论按比例盲抽复核；抽检不合格触发全量复核，并回写本次结论的可信标注</td></tr>
+      </table>
+    </div>`;
   const __pd=curPostDef();
   const roleTip = `<div style="font-size:12px;color:var(--text2);margin:0 0 14px;padding:8px 12px;background:#f8fafc;border-radius:8px">当前岗位：<b>${__pd.name}</b> — 关注 ${__pd.dims.map(function(d){return DIMENSIONS[d].name;}).join(' / ')}</div>`;
-  return `${gateHtml}${roleTip}<div class="page-head"><h2>诊断报告（${REPORT_CHAPTERS.length} 章 · 完整版）</h2><p>基于画像与引擎确定性计算生成——<b>完整长文档</b>：可通读、可整份打印、可导出 PDF/PPT/Word 与分享链接</p>
+  return `${gateHtml}${zeroCaseHtml}${roleTip}<div class="page-head"><h2>诊断报告（${REPORT_CHAPTERS.length} 章 · 完整版）</h2><p>基于画像与引擎确定性计算生成——<b>完整长文档</b>：可通读、可整份打印、可导出 PDF/PPT/Word 与分享链接</p>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center">
       <button class="btn btn-primary btn-sm" onclick="exportReport('pdf')">导出 PDF</button>
       <button class="btn btn-line btn-sm" onclick="exportReport('word')">导出 Word</button>
@@ -2951,7 +2961,7 @@ function reportPlainBody(){
   const ins=computeInsight(); const top3=diagnosis.slice(0,3);
   /* 空态守卫：无诊断结果时不得渲染 top3[0]（原会抛 TypeError 致正文永久空白） */
   if(!top3.length) return `<h4>人话版 · 一页讲清楚</h4>
-  <div class="insight-box" style="background:#FEF2F2;border-color:#FECACA"><b>暂无法生成</b>：当前画像尚未识别出可落地的优化机会（PRD 9.5.2：明说未覆盖，禁止编造）。
+  <div class="insight-box" style="background:#FEF2F2;border-color:#FECACA"><b>暂无法生成</b>：当前画像尚未识别出可落地的优化机会（质量门槛：明说未覆盖，禁止编造）。
   请先补齐画像与系统台账，再重新生成报告。</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
     <button class="btn btn-primary btn-sm" onclick="goto('profile-overview')">去补充画像 →</button>
@@ -3422,7 +3432,7 @@ function failProject(id){
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
       ${['数据','系统','组织','合规','能力'].map(c=>`<button class="btn btn-line btn-sm" onclick="doFailProject('${p.id}','${c}')">${c}</button>`).join('')}
     </div>
-    <div style="font-size:12px;color:var(--text2)">系统将：① 下调对应机会可行性评分 ② 把本次缺失的前置条件升级为「必需」 ③ 下次诊断提示"曾因该原因失败"（PRD 6.4.3）</div>
+    <div style="font-size:12px;color:var(--text2)">系统将：① 下调对应机会可行性评分 ② 把本次缺失的前置条件升级为「必需」 ③ 下次诊断提示"曾因该原因失败"</div>
     <div class="m-actions"><button class="btn-cancel" onclick="closeModal()">取消</button></div>`);
 }
 function doFailProject(id, cls){
@@ -8177,7 +8187,7 @@ function viewToolLib(){
   <div class="card" style="margin-top:16px"><h5>推荐准确率（反馈闭环）</h5>
     ${(()=>{ const ks=Object.keys(toolFeedback).filter(k=>toolFeedback[k]); const ad=ks.filter(k=>toolFeedback[k]==='adopted').length;
       return ks.length
-        ? '<div class="kpi primary">'+Math.round(ad/ks.length*100)+'%</div><div class="kpi-sub">已反馈 '+ks.length+' 个工具，其中采用 '+ad+' 个。反馈会回流调整同类工具的推荐优先级（PRD 9.6 效果层监控）。</div>'
+        ? '<div class="kpi primary">'+Math.round(ad/ks.length*100)+'%</div><div class="kpi-sub">已反馈 '+ks.length+' 个工具，其中采用 '+ad+' 个。反馈会回流调整同类工具的推荐优先级（效果层监控）。</div>'
         : '<div style="font-size:13px;color:var(--text3)">还没有反馈。对工具点「采用 / 不采用」，系统据此计算推荐准确率并回流优化排序。</div>'; })()}
   </div>`;
 }
@@ -8479,7 +8489,7 @@ function viewSpace(){
   <div class="card" style="margin-top:16px"><h5>收藏的机会</h5>
     ${favorites.size===0?'<div class="empty">还没有收藏，去「机会库」点 ☆ 收藏</div>':`<div class="grid g3">${Array.from(favorites).map(id=>{ const c=OPPORTUNITY_CARDS.find(x=>x.id===id); if(!c)return ''; return `<div class="card" style="background:#fafbfc"><b style="font-size:13px">${c.name}</b><div style="font-size:12px;color:var(--text2);margin-top:4px">${c.bizDomain} ${meansBadge(c.meansTech)}</div><button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="toggleFavorite('${c.id}')">取消收藏</button></div>`; }).join('')}</div>`}
   </div>
-  <div class="card" style="margin-top:16px"><h5>模型治理与持续学习（PRD 9.6）</h5>
+  <div class="card" style="margin-top:16px"><h5>模型治理与持续学习</h5>
     <table><tr><th>能力</th><th>当前状态</th><th>说明</th><th>操作</th></tr>
       <tr><td>版本回滚</td><td><span class="badge confirm">${modelVersion} 在线</span></td><td style="font-size:12px;color:var(--text2)">上一版本 ${modelHistory[0]||'—'}，一键回滚（目标 ≤5 分钟，灰度切流不中断）</td><td><button class="btn btn-ghost btn-sm" onclick="rollbackModel()">回滚 →</button></td></tr>
       <tr><td>A/B 实验</td><td>${abRunning?'<span class="badge ai">进行中</span>':'<span class="badge gray">未开启</span>'}</td><td style="font-size:12px;color:var(--text2)">${abRunning?abResult.dim:'支持提示词 / 模型 / 排序策略对比，按企业 ID 哈希稳定分流'}</td><td><button class="btn btn-ghost btn-sm" onclick="toggleAB()">${abRunning?'查看结果':'开启实验'}</button></td></tr>
