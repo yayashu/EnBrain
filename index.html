@@ -3,25 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>谋全局 EnBrain · 方案演示原型</title>
-<meta name="description" content="以企业系统文档为底座的企业诊断 Agent 方案（预研）：六层可溯源事实底座 → 可对账的硬节省 → 可落地的机会。演示数据均为虚构示例。">
-<meta http-equiv="refresh" content="0; url=./product-demo.html">
-<link rel="canonical" href="./product-demo.html">
+<title>谋全局 EnBrain · 企业诊断 Agent 方案（预研）</title>
+<meta name="description" content="以企业系统文档为底座：六层可溯源事实底座 → 可对账的硬节省 → 可落地的机会。方案阶段，含可交互原型；演示数据均为虚构示例。">
 <style>
-  body { margin:0; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-         font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif; background:#f8fafc; color:#0f172a; text-align:center; padding:24px; }
-  h1 { font-size:20px; margin:0 0 8px; }
-  p { font-size:13px; color:#64748b; margin:0 0 20px; line-height:1.7; max-width:520px; }
-  a.btn { display:inline-block; padding:14px 32px; border-radius:999px; color:#fff; text-decoration:none; font-weight:700;
-          background:linear-gradient(135deg,#4f46e5,#7c3aed); box-shadow:0 10px 26px rgba(79,70,229,.36); }
-  .note { margin-top:26px; font-size:12px; color:#94a3b8; }
+  :root { --ink:#0f172a; --sub:#64748b; --line:#e2e8f0; --primary:#4f46e5; --bg:#f8fafc; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif; line-height:1.65; }
+  .notice { background:#1f2937; color:#f9fafb; font-size:12px; text-align:center; padding:8px 16px; letter-spacing:.2px; }
+  .notice b { color:#fbbf24; }
+  header { max-width:1120px; margin:0 auto; padding:56px 24px 8px; text-align:center; }
+  h1 { font-size:30px; margin:0 0 12px; letter-spacing:.5px; }
+  .sub { color:var(--sub); font-size:15px; max-width:680px; margin:0 auto 26px; }
+  .cta { display:inline-block; padding:16px 40px; border-radius:999px; color:#fff; text-decoration:none; font-weight:700; font-size:17px;
+         background:linear-gradient(135deg,var(--primary),#7c3aed); box-shadow:0 10px 26px rgba(79,70,229,.35); transition:transform .18s,box-shadow .18s; }
+  .cta:hover { transform:translateY(-2px); box-shadow:0 16px 34px rgba(79,70,229,.44); }
+  .hint { color:#94a3b8; font-size:12px; margin-top:10px; }
+  main { max-width:1120px; margin:0 auto; padding:34px 24px 60px; }
+  h2 { font-size:16px; margin:34px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+  figure { margin:0; background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  figure img { display:block; width:100%; height:auto; }
+  figcaption { padding:10px 14px 12px; font-size:13px; color:var(--sub); }
+  figcaption b { color:var(--ink); display:block; margin-bottom:2px; font-size:13.5px; }
+  footer { border-top:1px solid var(--line); padding:24px; text-align:center; color:#94a3b8; font-size:12px; }
+  footer a { color:var(--primary); text-decoration:none; }
+  @media (max-width:720px) { .grid { grid-template-columns:1fr; } h1 { font-size:24px; } }
 </style>
 </head>
 <body>
-  <h1>谋全局 EnBrain · 方案演示原型</h1>
-  <p>正在进入演示。若未自动跳转，请点击下方按钮。<br>
-     本原型为<b>方案阶段演示</b>，企业名称与金额均为虚构示例，不构成报价或交付承诺。</p>
-  <a class="btn" href="./product-demo.html">进入演示 →</a>
-  <div class="note">仓库：<a href="https://github.com/yayashu/EnBrain">github.com/yayashu/EnBrain</a></div>
+<div class="notice">方案演示 · 界面数据与企业名称均为<b>虚构示例</b> · 金额为演示测算，<b>不构成报价或交付承诺</b></div>
+
+<header>
+  <h1>谋全局 EnBrain</h1>
+  <p class="sub">把企业已有的系统文档变成<b>可对账的结论</b>：六层可溯源事实底座 → 可核验的硬节省 → 可落地的机会。<br>结论会过时，事实不会——交付的是留在企业手里的资产。</p>
+  <a class="cta" href="./product-demo.html">进入演示，看完整流程 →</a>
+  <div class="hint">5 分钟走完 9 屏 · 无需注册 · 数据为虚构示例</div>
+</header>
+
+<main>
+  <h2>一次诊断，三类视图</h2>
+  <div class="grid">
+    <figure><img src="./docs/assets/shot-02-audit-facts.webp" alt="事实底座" loading="lazy"><figcaption><b>事实底座</b>六层知识逐条可溯源，先回答「我的事实够不够、准不准」</figcaption></figure>
+    <figure><img src="./docs/assets/shot-03-audit-savings.webp" alt="可核验的硬节省" loading="lazy"><figcaption><b>可核验的硬节省</b>每笔金额带算式与来源，状态可确认 / 驳回</figcaption></figure>
+    <figure><img src="./docs/assets/shot-04-audit-opportunities.webp" alt="可落地的机会" loading="lazy"><figcaption><b>可落地的机会</b>按 ALI 排序，不是一份建议清单</figcaption></figure>
+    <figure><img src="./docs/assets/shot-05-opportunity-evidence.webp" alt="推导依据" loading="lazy"><figcaption><b>推导依据</b>这条机会怎么来的：事实 → 落差 → 结论</figcaption></figure>
+  </div>
+
+  <h2>结论与边界</h2>
+  <div class="grid">
+    <figure><img src="./docs/assets/shot-06-report.webp" alt="诊断报告" loading="lazy"><figcaption><b>诊断报告</b>质量门通过才出正式版；首屏声明<b>允许「未发现重大问题」</b>，附覆盖度 / 盲区 / 抽检口径</figcaption></figure>
+    <figure><img src="./docs/assets/shot-07-role-home.webp" alt="我的工作台" loading="lazy"><figcaption><b>我的工作台</b>按关注维度组装的个人首页，不是统一看板</figcaption></figure>
+  </div>
+
+  <h2>资产与执行</h2>
+  <div class="grid">
+    <figure><img src="./docs/assets/shot-08-overview.webp" alt="企业全景" loading="lazy"><figcaption><b>企业全景</b>系统 · 年费 · 到期 · 闲置，一张台账</figcaption></figure>
+    <figure><img src="./docs/assets/shot-10-sys-ledger.webp" alt="系统台账" loading="lazy"><figcaption><b>系统台账</b>唯一真源，改一处全链生效</figcaption></figure>
+    <figure><img src="./docs/assets/shot-09-projects.webp" alt="落地闭环" loading="lazy"><figcaption><b>落地闭环</b>只记状态与验收，不做计划管理</figcaption></figure>
+    <figure><img src="./docs/assets/shot-11-knowledge.webp" alt="文枢智库" loading="lazy"><figcaption><b>文枢智库</b>事实底座的可浏览形态，可下钻到原文</figcaption></figure>
+  </div>
+
+  <h2>一线视角</h2>
+  <div class="grid">
+    <figure><img src="./docs/assets/shot-12-qa.webp" alt="我的智囊" loading="lazy"><figcaption><b>我的智囊</b>带着企业事实回答问题，不胡说</figcaption></figure>
+    <figure><img src="./docs/assets/shot-01-landing.webp" alt="落地页" loading="lazy"><figcaption><b>演示入口</b>打开即用，无需注册</figcaption></figure>
+  </div>
+</main>
+
+<footer>
+  <a href="https://github.com/yayashu/EnBrain">github.com/yayashu/EnBrain</a> · 脚本 MIT / 文档 CC BY 4.0 ·
+  方案阶段，无实现代码与真实交付 · 未验证项见对外稿 §14.2
+</footer>
 </body>
 </html>

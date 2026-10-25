@@ -3,9 +3,11 @@
 > 以「全量事实为底座」的企业诊断 Agent 方案。**当前处于需求与方案设计阶段，未落地、无真实项目交付**——对外表述以此为准。
 > 本仓开源的是**方法与方案**（对外需求稿 + 可交互原型），**不含实现代码、不含商业与过程材料**。
 
-![落地页](docs/assets/shot-01-landing.png)
+![落地页](https://yayashu.github.io/EnBrain/docs/assets/shot-01-landing.webp)
 
-**在线体验**：<https://yayashu.github.io/EnBrain/> · 或直接用浏览器打开本仓 `product-demo.html`（单文件，图表库需联网）
+**在线体验**：<https://yayashu.github.io/EnBrain/>（截图画廊） → <https://yayashu.github.io/EnBrain/product-demo.html>（可交互演示） · 或直接用浏览器打开本仓 `product-demo.html`（单文件，图表库需联网）
+
+> 若下方图片未显示：GitHub 会把 README 图片跳转到 `raw.githubusercontent.com` 取图，该域名在部分网络下不可达。请直接访问上面的 **在线体验** 地址（图片与演示均由 GitHub Pages 同源提供）。
 
 ## 一、当前状态
 
@@ -40,14 +42,14 @@
 
 | | |
 | --- | --- |
-| ![事实底座](docs/assets/shot-02-audit-facts.png) | ![可核验的硬节省](docs/assets/shot-03-audit-savings.png) |
+| ![事实底座](https://yayashu.github.io/EnBrain/docs/assets/shot-02-audit-facts.webp) | ![可核验的硬节省](https://yayashu.github.io/EnBrain/docs/assets/shot-03-audit-savings.webp) |
 | **事实底座**：六层知识逐条可溯源，先回答「我的事实够不够、准不准」 | **可核验的硬节省**：每笔金额带算式与来源，状态可确认 / 驳回 |
-| ![可落地的机会](docs/assets/shot-04-audit-opportunities.png) | ![机会推导依据](docs/assets/shot-05-opportunity-evidence.png) |
+| ![可落地的机会](https://yayashu.github.io/EnBrain/docs/assets/shot-04-audit-opportunities.webp) | ![机会推导依据](https://yayashu.github.io/EnBrain/docs/assets/shot-05-opportunity-evidence.webp) |
 | **可落地的机会**：按 ALI 排序，标注「已自落地 / 候补」 | **推导依据**：这条机会怎么来的——事实 → 落差 → 结论 |
 
 ### 3.2 结论与边界
 
-![诊断报告](docs/assets/shot-06-report.png)
+![诊断报告](https://yayashu.github.io/EnBrain/docs/assets/shot-06-report.webp)
 
 **诊断报告**：质量门通过才出正式版，四模式切换；首屏第二块就是「结论口径」——正面声明**允许「未发现重大问题」**，并给出覆盖度 / 盲区 / 抽检三条口径。诚实边界写在界面上，不只在文档里。
 
@@ -55,16 +57,16 @@
 
 | | |
 | --- | --- |
-| ![企业全景](docs/assets/shot-08-overview.png) | ![系统台账](docs/assets/shot-10-sys-ledger.png) |
+| ![企业全景](https://yayashu.github.io/EnBrain/docs/assets/shot-08-overview.webp) | ![系统台账](https://yayashu.github.io/EnBrain/docs/assets/shot-10-sys-ledger.webp) |
 | **企业全景**：系统 · 年费 · 到期 · 闲置，一张台账 | **系统台账**：唯一真源，改一处全链生效 |
-| ![落地闭环](docs/assets/shot-09-projects.png) | ![文枢智库](docs/assets/shot-11-knowledge.png) |
+| ![落地闭环](https://yayashu.github.io/EnBrain/docs/assets/shot-09-projects.webp) | ![文枢智库](https://yayashu.github.io/EnBrain/docs/assets/shot-11-knowledge.webp) |
 | **落地闭环**：状态与验收，不做计划管理 | **文枢智库**：事实底座的可浏览形态，可下钻到原文 |
 
 ### 3.4 一线视角
 
 | | |
 | --- | --- |
-| ![我的工作台](docs/assets/shot-07-role-home.png) | ![我的智囊](docs/assets/shot-12-qa.png) |
+| ![我的工作台](https://yayashu.github.io/EnBrain/docs/assets/shot-07-role-home.webp) | ![我的智囊](https://yayashu.github.io/EnBrain/docs/assets/shot-12-qa.webp) |
 | **我的工作台**：按关注维度组装的个人首页 | **我的智囊**：带着企业事实回答问题，不胡说 |
 
 ## 四、目录
@@ -72,7 +74,7 @@
 | 路径 | 内容 |
 | --- | --- |
 | `docs/` | 对外需求稿、路演版、交付方法（`交付准备/`）、界面截图（`assets/`） |
-| `product-demo.html` | 页面级全量原型（单文件；图表库走 CDN，需联网）。GitHub Pages 入口为根目录 `index.html`（跳转到此文件） |
+| `product-demo.html` | 页面级全量原型（单文件；图表库走 CDN，需联网）。Pages 首页为根目录 `index.html`（截图画廊 + 进入演示） |
 | `system-prototype/` | 核心诊断引擎原型（`index.html` + `engine.js`，无外部依赖） |
 | `experiments/` | 公开文档实测记录（语料不随仓发布，抓取方式见记录） |
 | `tools/` | **只依赖公开文件**的审计脚本（`verify.py`、`audit_*.py`、`corpus_stats.py`），在仓库根运行 |

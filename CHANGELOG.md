@@ -4,6 +4,13 @@
 
 > **两套版本号**：文首的 `vX.Y` = GitHub 发布版本（tag）；文档头部写的版本行 = 该文档自身的修订号（对外稿当前 `v1.1`，内容未变则不动）。
 
+## v1.8 · 2026-10-25
+
+- **截图压缩**：12 张 PNG（1600×1000，2.2 MB）→ **WebP**（1440 宽，q82，**1.03 MB**，-53%），文字仍清晰
+- **图片改走 GitHub Pages 同源地址**（`https://yayashu.github.io/EnBrain/docs/assets/...`）：README 原相对路径会被 GitHub 跳转到 `raw.githubusercontent.com` 取图，该域名在部分网络不可达导致裂图
+- **Pages 首页升级**：`index.html` 由纯跳转改为**截图画廊落地页**（12 张图 + 「进入演示」主按钮），README 补充裂图时的兜底说明
+- 删除旧的 12 张 PNG（避免双份资产）
+
 ## v1.7 · 2026-10-25
 
 - **重命名原型入口**：`prototype.html` → **`product-demo.html`**（原文件名只说明"它是原型"，不说明"点进去能做什么"），同步更新 18 处引用：README、CONTRIBUTING、Pages 入口 `index.html`、3 个公开工具与 3 个内部工具
