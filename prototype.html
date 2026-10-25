@@ -51,6 +51,21 @@
   .landing-feats { margin-top:34px; display:flex; gap:28px; color:var(--text2); font-size:13px; }
   .landing-feats b { color:var(--text); display:block; margin-bottom:4px; }
 
+  /* ===== 主行动按钮（落地页唯一强指引：进入演示） ===== */
+  .cta-wrap { margin:30px 0 26px; display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .cta-hero { position:relative; border:none; cursor:pointer; font-family:inherit; font-size:19px; font-weight:700; color:#fff; letter-spacing:.5px;
+    padding:18px 46px; border-radius:999px; background:linear-gradient(135deg,var(--primary) 0%,#7c3aed 100%);
+    box-shadow:0 10px 26px rgba(79,70,229,.36); transition:transform .18s ease, box-shadow .18s ease; }
+  .cta-hero:hover { transform:translateY(-2px); box-shadow:0 16px 34px rgba(79,70,229,.46); }
+  .cta-hero:active { transform:translateY(0); }
+  .cta-hero .cta-arrow { display:inline-block; margin-left:12px; animation:nudge 1.2s ease-in-out infinite; }
+  @keyframes nudge { 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(7px); } }
+  .cta-hero::after { content:''; position:absolute; inset:-7px; border-radius:999px; border:2px solid rgba(37,99,235,.45); animation:halo 2.4s ease-out infinite; pointer-events:none; }
+  @keyframes halo { 0%{ opacity:.85; transform:scale(.985); } 70%{ opacity:0; transform:scale(1.05); } 100%{ opacity:0; transform:scale(1.05); } }
+  .cta-hint { font-size:12px; color:var(--text3); }
+  @media (max-width:560px) { .cta-hero { font-size:16px; padding:15px 28px; } }
+  @media (prefers-reduced-motion: reduce) { .cta-hero .cta-arrow, .cta-hero::after { animation:none; } }
+
   /* ============ 应用外壳 ============ */
   #app { display:none; height:100vh; }
   #sidebar { position:fixed; left:0; top:0; bottom:0; width:220px; background:var(--card); border-right:1px solid var(--border); overflow-y:auto; z-index:20; }
@@ -293,10 +308,11 @@
   <div class="logo">谋全局 EnBrain</div>
   <h1>让每个企业都拥有自己的<br><span>CIO 级运营优化大脑</span> <span class="pg-id">P0</span></h1>
   <div class="sub">上传企业全套系统文档 → AI 全量学习 → 沉淀<b>你自己的事实底座</b>，交付「闲置系统 / 未启用功能 / 手工搬运」<b>可核验的省钱结论</b>。<b>结论会过时，事实不会</b>——分析基于确定的、可溯源的数据，不靠访谈猜，靠文档算。</div>
+  <div class="cta-wrap">
+    <button class="cta-hero" onclick="enterApp()">进入演示，看完整诊断流程<span class="cta-arrow">→</span></button>
+    <div class="cta-hint">5 分钟走完 9 屏 · 无需注册 · 企业名称与金额均为虚构示例</div>
+  </div>
   <div class="search-box">
-    <div class="sb-btns">
-      <button class="btn-main" onclick="enterApp()">直接体验完整流程</button>
-    </div>
     <div style="font-size:12px;color:var(--text2)">未初始化 → 五步开通引导 · 已完善 → 直接进入工作台 · <a style="color:var(--primary);cursor:pointer" onclick="fitCheck()">不确定适不适合？30 秒自检</a></div>
   </div>
   <div class="examples">
